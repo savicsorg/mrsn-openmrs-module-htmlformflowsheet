@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.Drug;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
@@ -29,8 +28,6 @@ import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
-import org.openmrs.module.htmlformentry.schema.DrugOrderAnswer;
-import org.openmrs.module.htmlformentry.schema.DrugOrderField;
 import org.openmrs.module.htmlformentry.schema.HtmlFormField;
 import org.openmrs.module.htmlformentry.schema.HtmlFormSchema;
 import org.openmrs.module.htmlformentry.schema.HtmlFormSection;
@@ -286,26 +283,26 @@ public class HtmlFormFlowsheetUtil {
 		 }
 	 }
 
-	public static Set<Drug> getAllDrugsUsedInHtmlForm(Form form){
-		Set<Drug> drugs = new HashSet<Drug>();
-		try {
-			FormEntrySession session = createFormEntrySession(form);
-			String htmlToDisplay = session.getHtmlToDisplay();
-			HtmlFormSchema schema = session.getContext().getSchema();
-			for (HtmlFormField hff : getAllFields(schema)) {
-				if (hff instanceof DrugOrderField) {
-					DrugOrderField dof = (DrugOrderField) hff;
-					for (DrugOrderAnswer doa : dof.getDrugOrderAnswers()) {
-						drugs.add(doa.getDrug());
-					}
-				}
-			}
-		}
-		catch (Exception ex){
-			throw new RuntimeException(ex);
-		}
-		return drugs;
- }
+//	public static Set<Drug> getAllDrugsUsedInHtmlForm(Form form){
+//		Set<Drug> drugs = new HashSet<Drug>();
+//		try {
+//			FormEntrySession session = createFormEntrySession(form);
+//			String htmlToDisplay = session.getHtmlToDisplay();
+//			HtmlFormSchema schema = session.getContext().getSchema();
+//			for (HtmlFormField hff : getAllFields(schema)) {
+//				if (hff instanceof DrugOrderField) {
+//					DrugOrderField dof = (DrugOrderField) hff;
+//					for (DrugOrderAnswer doa : dof.getDrugOrderAnswers()) {
+//						drugs.add(doa.getDrug());
+//					}
+//				}
+//			}
+//		}
+//		catch (Exception ex){
+//			throw new RuntimeException(ex);
+//		}
+//		return drugs;
+// }
 
 	public static List<Encounter> getEncountersForPatient(Patient p, Form form, EncounterType encounterType) {
 	    EncounterSearchCriteriaBuilder b = new EncounterSearchCriteriaBuilder();

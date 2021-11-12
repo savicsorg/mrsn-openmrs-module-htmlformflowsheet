@@ -1,7 +1,6 @@
 package org.openmrs.module.htmlformflowsheet.web.dwr;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +36,7 @@ public class HtmlFormFlowsheetDWR {
             Encounter enc = es.getEncounter(encId);
             Form form = HtmlFormFlowsheetUtil.getFormFromString(formId);
             Set<Concept> concepts = HtmlFormFlowsheetUtil.getAllConceptsUsedInHtmlForm(form);
-            Set<Drug> drugs = HtmlFormFlowsheetUtil.getAllDrugsUsedInHtmlForm(form);
+//            Set<Drug> drugs = HtmlFormFlowsheetUtil.getAllDrugsUsedInHtmlForm(form);
            
             
             for (Obs o : enc.getAllObs()){
@@ -51,23 +50,23 @@ public class HtmlFormFlowsheetDWR {
                 }    
             }
             
-            if (enc.getOrders() != null){
-                for (Order or : enc.getOrders()){
-                    if (or instanceof DrugOrder){
-                        DrugOrder dor = (DrugOrder) or;
-                        if (dor.getDrug() != null){
-                            for (Drug dTmp : drugs){
-                                if (dTmp.getDrugId().equals(dor.getDrug().getDrugId())){
-                                    dor.setVoided(true);
-                                    dor.setVoidedBy(Context.getAuthenticatedUser());
-                                    dor.setVoidReason("voided from htmlformflowsheet");
-                                    dor.setDateVoided(new Date());
-                                }
-                            }
-                        }    
-                    }
-                }
-            }
+//            if (enc.getOrders() != null){
+//                for (Order or : enc.getOrders()){
+//                    if (or instanceof DrugOrder){
+//                        DrugOrder dor = (DrugOrder) or;
+//                        if (dor.getDrug() != null){
+//                            for (Drug dTmp : drugs){
+//                                if (dTmp.getDrugId().equals(dor.getDrug().getDrugId())){
+//                                    dor.setVoided(true);
+//                                    dor.setVoidedBy(Context.getAuthenticatedUser());
+//                                    dor.setVoidReason("voided from htmlformflowsheet");
+//                                    dor.setDateVoided(new Date());
+//                                }
+//                            }
+//                        }    
+//                    }
+//                }
+//            }
             boolean allObsAreVoided = true;
             for (Obs o : enc.getAllObs()){
                 if (!o.isVoided()){
@@ -85,14 +84,15 @@ public class HtmlFormFlowsheetDWR {
                 }
             }
             if (allObsAreVoided && allOrdersAreVoided){
-                //log.info("Voiding Encounter");
+               log.info("Voiding Encounter");
                 es.voidEncounter(enc, "mdrtb Cat-IV");
             } else {
-                //log.info("Saving Encounter because there are still unvoided obs.");
+               log.info("Saving Encounter because there are still unvoided obs.");
                 es.saveEncounter(enc);
             }     
         } catch (Exception ex){
             ex.printStackTrace();
+            log.error(ex);
             return false;
         }
         return true;
